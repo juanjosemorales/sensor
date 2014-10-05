@@ -4,8 +4,8 @@ from datetime import datetime
 
 arduino = serial.Serial('/dev/ttyACM0', 9600)
 
-db = MySQLdb.connect(host="192.168.0.5", port=3306,
-		     user="root", passwd="root", db="arduino")
+db = MySQLdb.connect(host="192.168.x.x", port=3306,
+		     user="", passwd="", db="")
 cursor = db.cursor()
 
 while 1 : 
