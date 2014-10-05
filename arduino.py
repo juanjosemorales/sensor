@@ -1,20 +1,24 @@
 import serial
 import MySQLdb
+from datetime import datetime
 
 arduino = serial.Serial('/dev/ttyACM0', 9600)
 
-db = MySQLdb.connect(host="ip", port=3306,
-		     user="user", passwd="user", db="db")
+db = MySQLdb.connect(host="192.168.0.5", port=3306,
+		     user="root", passwd="root", db="arduino")
 cursor = db.cursor()
 
 while 1 : 
 	val = arduino.readline()
 	val = str(val).rstrip()
+	sensor="PH"
+	time = str(datetime.now())
 	print("The value is {} ".format(val))
-	sql = "INSERT INTO sensor_info_test1 (data) VALUES ('"+val+"')"
-	print(sql)
+	sql = "INSERT INTO monitoring_sensor (sensor_type, sensor_data, date) VALUES (%s, %s, %s)"
+	params = sensor, val, time
+	print(sql, params)
 	try:
-		cursor.execute(sql)
+		cursor.execute(sql, params)
 		db.commit()
 	except:
 		db.rollback()
