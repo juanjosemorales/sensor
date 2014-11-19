@@ -1,39 +1,22 @@
 import serial
 import MySQLdb
-from datetime import datetime
+import datetime
 import requests
 
-#arduino = serial.Serial('/dev/ttyACM0', 9600)
+arduino = serial.Serial('/dev/ttyACM0', 9600)
 url = "http://localsprout.pythonanywhere.com/monitoring/get_readings"
 i = 0
-while i < 2:
-	value = "value" + str(i)
-	data = {'id': value}
-	r = requests.post(url, data) 
+while i == 0:
+	arduino_reading = str(arduino.readline()).strip()	
+	value = arduino_reading	
+	date = str(datetime.datetime.now())	
+	reading_type = ""
+	if "pH" in arduino_reading:
+		reading_type = "pH"
+	elif "EC" in arduino_reading:
+		reading_type = "EC"
+	else:
+		reading_type = "Bad"	
+	reading = { "type":reading_type, "date":date, "reading":value }
+	r = requests.post(url, data=reading) 
 	print(r.text)
-	i+=1
-
-'''db = MySQLdb.connect(host="192.168.x.x", port=3306,
-		     user="", passwd="", db="")
-cursor = db.cursor()
-'''
-
-'''
-while 1 : 
-	val = arduino.readline()
-	val = str(val).rstrip()
-	sensor="PH"
-	time = str(datetime.now())
-	print("The value is {} ".format(val))
-	sql = "INSERT INTO monitoring_sensor (sensor_type, sensor_data, date) VALUES (%s, %s, %s)"
-	params = sensor, val, time
-	print(sql, params)
-	try:
-		cursor.execute(sql, params)
-		db.commit()
-	except:
-		db.rollback()
-		
-'''
-	
-	
