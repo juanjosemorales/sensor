@@ -1,13 +1,24 @@
 import serial
 import MySQLdb
 from datetime import datetime
+import requests
 
-arduino = serial.Serial('/dev/ttyACM0', 9600)
+#arduino = serial.Serial('/dev/ttyACM0', 9600)
+url = "http://localsprout.pythonanywhere.com/monitoring/get_readings"
+i = 0
+while i < 2:
+	value = "value" + str(i)
+	data = {'id': value}
+	r = requests.post(url, data) 
+	print(r.text)
+	i+=1
 
-db = MySQLdb.connect(host="192.168.x.x", port=3306,
+'''db = MySQLdb.connect(host="192.168.x.x", port=3306,
 		     user="", passwd="", db="")
 cursor = db.cursor()
+'''
 
+'''
 while 1 : 
 	val = arduino.readline()
 	val = str(val).rstrip()
@@ -23,5 +34,6 @@ while 1 :
 	except:
 		db.rollback()
 		
+'''
 	
 	
