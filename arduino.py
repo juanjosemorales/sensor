@@ -1,5 +1,4 @@
 import serial
-import MySQLdb
 import datetime
 import requests
 
