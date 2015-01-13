@@ -1,2 +1,11 @@
-This repository has the code for both the "arduino controller" in the Raspberry PI and the arduino UNO microcontroller
-======
+Sensor
+==============
+
+Arduino Microcontroller .ino file
+--------------
+The .ino file contains code for the arduino microcontroller
+
+arduino.py file
+--------------
+The code that controls the arduino from the Raspberry PI
+
