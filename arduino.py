@@ -5,12 +5,12 @@ import requests
 
 url = "http://localsprout.pythonanywhere.com/monitoring/get_readings"
 i = 0
-try:
-	arduino = serial.Serial('/dev/ttyACM0', 9600)
-	while i == 0:
+while i == 0:
+	date = str(datetime.datetime.now())	
+	try:
+		arduino = serial.Serial('/dev/ttyACM0', 9600)
 		arduino_reading = str(arduino.readline()).strip()	
 		value = arduino_reading	
-		date = str(datetime.datetime.now())	
 		reading_type = ""
 		if "pH" in arduino_reading:
 			reading_type = "pH"
@@ -21,5 +21,7 @@ try:
 		reading = { "type":reading_type, "date":date, "reading":value }
 		r = requests.post(url, data=reading) 
 		print(r.text)
-except Exception, e:
-	print "Unexpected error: " + str(e)
+	except Exception, e:
+		reading = { "type":"fatal_error", "date":date, "reading":str(e) }
+		r = requests.post(url, data=reading) 
+		print "Unexpected error: " + str(e)
