@@ -1,6 +1,6 @@
 /*
  # This sample code is used to test the pH meter V1.0.
- # Editor : YouYou
+ # Editor : localsprout
  # Ver    : 1.0
  # Product: analog pH meter
  # SKU    : SEN0161
@@ -10,15 +10,16 @@
 #include <OneWire.h> //required for the temperature sensor that comes with the EC sensor
 
 //PH Sensor Constants------------------------------------------------------------------
-#define PHsensorPin A5            //pH meter Analog output to Arduino Analog Input 0
-#define PHoffset 0.32           //deviation compensate
+#define PHsensorPin A2            //pH meter Analog output to Arduino Analog Input 0
+#define PHoffset 0.56           //deviation compensate
 
 //EC Sensor Constants-------------------------------------------------------------------
 #define StartConvert 0
 #define ReadTemperature 1
-byte ECsensorPin = A2;  //EC Meter analog output,pin on analog 1
+byte ECsensorPin = A0;  //EC Meter analog output,pin on analog 1
 byte DS18B20_Pin = 2; //DS18B20 signal, pin on digital 2
 float temperature,ECcurrent; 
+int delayFactor = 20000;
 
 //Temperature chip i/o
 OneWire ds(DS18B20_Pin);  // on digital pin 2
@@ -36,12 +37,12 @@ void loop(void)
   pHValue = 3.5*pHvoltage+PHoffset;
   Serial.print("pH Voltage: "); Serial.print(pHvoltage);
   Serial.print(" pH: "); Serial.println(pHValue,2);
-  delay(50000);
+  delay(delayFactor);
   
   //EC Intervals
    ECValue = analogRead(ECsensorPin);
    ECVoltage=ECValue*(float)5000/1024;
-   delay(50000);
+   delay(delayFactor);
    
    /*
    Every once in a while,MCU read the temperature from the DS18B20 and then let the DS18B20 start the convert.
@@ -69,7 +70,7 @@ void loop(void)
      Serial.print(ECcurrent,2);  //two decimal
      Serial.println(" ms/cm");
    }
-   delay(10000);
+   delay(delayFactor);
 }
 
 /*
@@ -114,3 +115,4 @@ float TempProcess(bool ch)
   }
   return TemperatureSum;  
 }
+
